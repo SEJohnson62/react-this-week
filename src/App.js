@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import moment from 'moment';
+
+function GetWeek(start){
+  const week = [];
+  let i = 0;
+  while(week.length < 7) {
+    week.push(moment(start).add(i,'day'));
+    i++;
+  }
+  return(week);
+}
 
 function App() {
+  const [startDate, setDate ] = useState(moment().startOf('week'));
+
+  let currentWeek = GetWeek( startDate );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>This Week</h1>
+      <button onClick={ ()=>setDate(moment(startDate).add('week', -1)) }>Previous Week</button>
+      <button onClick={ ()=>setDate(moment(startDate).add('week', 1)) }>Next Week</button>
+      <ul>
+        {
+        currentWeek.map((day, idx) => {
+        return(
+          <li key = { idx }>{ day.format('ddd MM/DD/YYYY') }</li>
+        )})
+      }
+    </ul>
     </div>
   );
 }
